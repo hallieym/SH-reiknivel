@@ -195,20 +195,6 @@
         return (incomeLower - yearlyIncome) / (incomeUpper - incomeLower) * specialSupport;
     }
 
-<<<<<<< HEAD
-    var getFixedSpecialSupport = function(minValue, monthlySupport, assets) {
-        if (minValue - monthlySupport < 0.0)
-            return 0.0;
-        if (assets > MAX_ASSETS)
-            return 0.0;
-        return minValue - monthlySupport;
-    }
-
-    var getSupportRatio = function(cost, monthlySupport, income) {
-        if (cost - monthlySupport === 0 || income === 0)
-            return 0.0;
-        return (cost - monthlySupport) / income;
-=======
     var getFixedSpecialSupport = function(minValue, hb_monthlySupport, assets) {
         if (minValue - hb_monthlySupport < 0.0)
             return 0.0;
@@ -221,7 +207,6 @@
         if (cost - hb_monthlySupport === 0 || income === 0)
             return 0.0;
         return (cost - hb_monthlySupport) / income;
->>>>>>> 0161f8b7559fe83ff358d38377fbd33543a88ab4
     }
 
     var getSupportLevel = function(supportRatio) {

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Reiknivél</title>
+  <meta charset="utf-8"></meta>
+
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.css"/>
+  <link rel="stylesheet" type="text/css" href="css/calculator.css"/>
+
+  <script src="js/jquery.js"></script>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="col-sm-6">
+
+    <h3>Forsendur umsóknar</h3>
+
+    <hr>
+
+    <div class="form-group">
+      <label>Fjöldi heimilismanna í húsnæði</label>
+      <select class="form-control input-sm" id="dwellers">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4 eða fleiri</option>
+      </select>
+    </div>
+
+    <div class="form-group" id="income-error">
+      <label>
+        Samanlagðar mánaðartekjur heimilismanna, 18 ára og eldri
+      </label>
+      <input class="form-control input-sm currency" id="income" value=""/>
+    </div>
+
+    <div class="form-group" id="assets-error">
+      <label>
+        Samanlagðar nettó eignir heimilismanna, 18 ára og eldri
+      </label>
+      <input class="form-control input-sm currency" id="assets" value=""/>
+    </div>
+
+    <div class="form-group" id="cost-error">
+      <label>
+        Húsnæðiskostnaður (leigufjárhæð en ekki hússjóður, hiti, rafmagn og þess háttar)
+      </label>
+      <input class="form-control input-sm currency" id="cost" value=""/>
+    </div>
+
+    <div class="form-group">
+      <button class="btn btn-success" id="calculate">Reikna</button>
+      <button class="btn btn-warning" id="clear">Hreinsa</button>
+    </div>
+
+    <hr>
+
+    <div class="row">
+      <label class="col-sm-8">Húsnæðisbætur</label>
+      <div class="col-sm-4" id="support"></div>
+    </div>
+
+    <div class="row">
+      <label class="col-sm-8">Sérstakur húsnæðistuðningur</label>
+      <div class="col-sm-4" id="special-support"></div>
+    </div>
+
+    <div class="row">
+      <label class="col-sm-8">Samanlagður húsnæðisstuðningur</label>
+      <div class="col-sm-4" id="total"></div>
+    </div>
+
+    <hr>
+
+    <div class="row">
+      <label class="col-sm-8">Hlutfall húsnæðiskostnaðar af tekjum</label>
+      <div class="col-sm-4" id="support-ratio"></div>
+    </div>
+
+    <div class="row">
+      <label class="col-sm-8">Stig vegna húsnæðiskostnaðar</label>
+      <div class="col-sm-4" id="support-level"></div>
+    </div>
+
+    <hr>
+
+  </div>
+
+</div>
+
+<script src="js/calculator.js?v=8"></script>
+
+</body>
+</html>

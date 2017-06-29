@@ -20,23 +20,24 @@
     // special
 
     var LOW_RENT = 91300.0;
-    var SPECIAL_SUPPORT_RATIO = 0.90
-    var MAX_SUPPORT_RATIO_LOWER = 0.60;
+    var SPECIAL_SUPPORT_RATIO = 1.00
+    var MAX_SUPPORT_RATIO_LOWER = 0.75;
     var MAX_SUPPORT_RATIO_HIGHER = 0.75;
-    var MAX_TOTAL_SUPPORT = 82000.0;
-    var MAX_ASSETS = 5126000.0
+    var MAX_TOTAL_SUPPORT = 90000.0;
+    var MAX_ASSETS = 5126000.0;
+    var MIN_HOUSING_COST = 40000.0;
 
-    var DWELLERS_LOWER_1 = 3100000.0;
-    var DWELLERS_LOWER_2 = 4100000.0;
-    var DWELLERS_LOWER_3 = 4800000.0;
-    var DWELLERS_LOWER_4 = 5200000.0;
+    var DWELLERS_LOWER_1 = 3373000.0;
+    var DWELLERS_LOWER_2 = 4461064.0;
+    var DWELLERS_LOWER_3 = 5222710.0;
+    var DWELLERS_LOWER_4 = 5657936.0;
 
-    var DWELLERS_UPPER_1 = 3875000.0;
-    var DWELLERS_UPPER_2 = 5125000.0;
-    var DWELLERS_UPPER_3 = 6000000.0;
-    var DWELLERS_UPPER_4 = 6500000.0;
+    var DWELLERS_UPPER_1 = 4216250.0;
+    var DWELLERS_UPPER_2 = 5576330.0;
+    var DWELLERS_UPPER_3 = 6528388.0;
+    var DWELLERS_UPPER_4 = 7072420.0;
 
-    // dom 
+    // dom
 
     var dwellers = document.getElementById('dwellers');
     var income = document.getElementById('income');
@@ -106,7 +107,7 @@
             isValid = false;
             $(incomeError).addClass('has-error');
         }
-        
+
         if (!assets.value.length) {
             isValid = false;
             $(assetsError).addClass('has-error');
@@ -165,7 +166,7 @@
             return -baseAmount;
         return (incomeLimit - yearlyIncome) * INCOME_SUBTRACTION_RATIO;
     }
- 
+
     var getAssetSubtraction = function(assets, support) {
         if (assets > ASSETS_LIMIT_UPPER)
             return -support;
@@ -180,6 +181,12 @@
         return MAX_SUPPORT_RATIO_LOWER;
     }
 
+    var getMaxSupport = function (cost, hb_monthlySupport) {
+        if ((cost - hb_monthlySupport) > MIN_HOUSING_COST)
+            return cost - MIN_HOUSING_COST;
+        return hb_monthlySupport;
+    }
+
     var getSpecialSubtraction = function(yearlyIncome, incomeLower, incomeUpper, specialSupport) {
         if (yearlyIncome < incomeLower)
             return 0.0;
@@ -188,6 +195,7 @@
         return (incomeLower - yearlyIncome) / (incomeUpper - incomeLower) * specialSupport;
     }
 
+<<<<<<< HEAD
     var getFixedSpecialSupport = function(minValue, monthlySupport, assets) {
         if (minValue - monthlySupport < 0.0)
             return 0.0;
@@ -200,6 +208,20 @@
         if (cost - monthlySupport === 0 || income === 0)
             return 0.0;
         return (cost - monthlySupport) / income;
+=======
+    var getFixedSpecialSupport = function(minValue, hb_monthlySupport, assets) {
+        if (minValue - hb_monthlySupport < 0.0)
+            return 0.0;
+        if (assets > MAX_ASSETS)
+            return 0.0;
+        return minValue - hb_monthlySupport;
+    }
+
+    var getSupportRatio = function(cost, hb_monthlySupport, income) {
+        if (cost - hb_monthlySupport === 0 || income === 0)
+            return 0.0;
+        return (cost - hb_monthlySupport) / income;
+>>>>>>> 0161f8b7559fe83ff358d38377fbd33543a88ab4
     }
 
     var getSupportLevel = function(supportRatio) {
@@ -240,22 +262,22 @@
         var assetSubtraction = getAssetSubtraction(cleaned.assets, support);
         var support = support + assetSubtraction;
 
-        var monthlySupport = Math.round(support / 12.0);
+        var hb_monthlySupport = Math.round(support / 12.0);
 
         var maxSupport = cleaned.cost * MAX_SUPPORT_RATIO;
 
-        if (monthlySupport > maxSupport)
-            monthlySupport = maxSupport;
+        if (hb_monthlySupport > maxSupport)
+            hb_monthlySupport = maxSupport;
 
-        supportDisplay.innerHTML = printFormat(monthlySupport);
+        supportDisplay.innerHTML = printFormat(hb_monthlySupport);
 
         // special
 
-        var maxRatio = getMaxRatio(cleaned.cost);
+        // var maxRatio = getMaxRatio(cleaned.cost);
         var incomeLower = getDwellersLower(cleaned.dwellers);
         var incomeUpper = getDwellersUpper(cleaned.dwellers);
 
-        var specialSupport = monthlySupport * SPECIAL_SUPPORT_RATIO;
+        var specialSupport = hb_monthlySupport * SPECIAL_SUPPORT_RATIO;
 
         var specialSubtraction = getSpecialSubtraction(
                 yearlyIncome, incomeLower, incomeUpper, specialSupport);
@@ -265,22 +287,23 @@
         if (cleaned.assets > MAX_ASSETS)
             specialSupport = 0.0;
 
-        var totalSupport = monthlySupport + specialSupport;
+        var totalSupport = hb_monthlySupport + specialSupport;
 
-        var maxSpecialSupport = cleaned.cost * maxRatio;
+        // var maxSpecialSupport = cleaned.cost * maxRatio;
+        var maxSupportComparedToMinHousingCost = getMaxSupport(cleaned.cost, hb_monthlySupport);
 
-        var minValue = Math.min(totalSupport, MAX_TOTAL_SUPPORT, maxSpecialSupport);
+        var minValue = Math.min(totalSupport, MAX_TOTAL_SUPPORT, maxSupportComparedToMinHousingCost);
 
         var fixedSpecialSupport = getFixedSpecialSupport(
-                minValue, monthlySupport, cleaned.assets);
+                minValue, hb_monthlySupport, cleaned.assets);
 
         specialSupportDisplay.innerHTML = printFormat(fixedSpecialSupport);
 
-        totalDisplay.innerHTML = printFormat(monthlySupport + fixedSpecialSupport);
+        totalDisplay.innerHTML = printFormat(hb_monthlySupport + fixedSpecialSupport);
 
         // ratio
 
-        var supportRatio = getSupportRatio(cleaned.cost, monthlySupport, cleaned.income);
+        var supportRatio = getSupportRatio(cleaned.cost, hb_monthlySupport, cleaned.income);
 
         supportRatioDisplay.innerHTML = Math.floor(supportRatio * 1000) / 10 + '%';
 
@@ -297,3 +320,4 @@
     }
 
 })(jQuery);
+

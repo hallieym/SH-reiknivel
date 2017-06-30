@@ -20,7 +20,7 @@
     // special
 
     var LOW_RENT = 91300.0;
-    var SPECIAL_SUPPORT_RATIO = 1.00;
+    var SPECIAL_SUPPORT_RATIO = 1.00
     var MAX_SUPPORT_RATIO_LOWER = 0.75;
     var MAX_SUPPORT_RATIO_HIGHER = 0.75;
     var MAX_TOTAL_SUPPORT = 90000.0;
@@ -184,7 +184,7 @@
     var getMaxSupport = function (cost, hb_monthlySupport) {
         if ((cost - hb_monthlySupport) > MIN_HOUSING_COST)
             return cost - MIN_HOUSING_COST;
-        return hb_monthlySupport;
+        return 0.0;
     }
 
     var getSpecialSubtraction = function(yearlyIncome, incomeLower, incomeUpper, specialSupport) {
@@ -305,4 +305,3 @@
     }
 
 })(jQuery);
-
